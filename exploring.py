@@ -1,3 +1,4 @@
+import time
 import argparse
 import requests
 
@@ -48,12 +49,20 @@ elif args.net == 'resnet152':
 elif args.net == 'vgg19':
     net = vgg19_bn(pretrained=True)
 
+net.cuda()
+
+start_time = time.monotonic()
+
 fc_out = net(image_variable)
 scores = fc_out.data.numpy()
 scores = scores.squeeze()
 sorted_labels_idx = np.argsort(scores)
 
-print('Net output =', fc_out.data)
+end_time = time.monotonic()
+
+print('Top results:')
 for i in range(1, args.top_n + 1):
     label_idx = sorted_labels_idx[-i]
     print('Top {}:'.format(i), labels[label_idx])
+
+print('Elapsed = {:.3f}s'.format(end_time - start_time))
