@@ -19,3 +19,5 @@ if response.ok:
 
             if i and i % args.print_every == 0:
                 print('\rDownloaded {:.2f}%'.format(downloaded_percents), end='')
+else:
+    print('Response is not OK. Try restart download.')
